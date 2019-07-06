@@ -43,6 +43,16 @@ public class HardcodedService {
 		}
 		return course;
 	}
+	public Student saveStudent(Student student) {
+		if (student.getId() == -1 || student.getId() == 0) {
+			student.setId(++studentIdCounter);
+			students.add(student);
+		} else {
+			deleteStudentById(student.getId());
+			students.add(student);
+		}
+		return student;
+	}
 
 	public Course deleteCourseById(long id) {
 		Course course = findCourseById(id);
@@ -53,6 +63,19 @@ public class HardcodedService {
 
 		if (courses.remove(course)) {
 			return course;
+		}
+
+		return null;
+	}
+	public Student deleteStudentById(long id) {
+		Student student = findStudentById(id);
+
+
+		if (student == null)
+			return null;
+
+		if (students.remove(student)) {
+			return student;
 		}
 
 		return null;
