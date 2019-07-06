@@ -1,0 +1,10 @@
+TO Compile
+
+mvn compiler:compile
+
+To Generate Jar
+mvn install
+
+## To Run the Service
+java -jar target/skoolserver-1.0-SNAPSHOT.jar
+

@@ -10,9 +10,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.logging.Logger;
 //@CrossOrigin(origins = "*,http://localhost:3000", allowedHeaders = "*")
-//@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
+@CrossOrigin(origins = { "http://192.168.56.1:3000","http://localhost:3000","http://10.160.0.9","http://10.160.0.9:80", "http://34.93.62.135","http://34.93.62.135:80" })
 
-@CrossOrigin(origins = {"*"})
 @RestController
 public class MyServerResource {
 	private Logger log(){
