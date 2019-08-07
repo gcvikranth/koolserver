@@ -1,9 +1,18 @@
 package com.kool.server;
 
-public class Student {
+import javax.persistence.*;
 
+@Entity
+@Table(name="Student")
+@NamedQuery(query = "select s from Student s", name = "query_find_all_students")
+
+public class Student {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
+    @Column(name = "studentName")
     private String studentName;
+    @Column(name= "schoolName")
     private String schoolName;
     private String classStudiesIn;
 
@@ -27,9 +36,6 @@ public class Student {
         this.id = id;
     }
 
-    public String getUsername() {
-        return getStudentName();
-    }
 
 
     @Override

@@ -23,6 +23,9 @@ public class MyServerResource {
 	@Autowired
 	private HardcodedService hardCodedManagementService;
 
+	@Autowired
+	private MyDatabaseService myDatabaseService;
+
 	@GetMapping("/instructors/{username}/courses")
 	public List<Course> getAllCourses(@PathVariable String username) {
 		return hardCodedManagementService.findAllCourses();
@@ -33,7 +36,7 @@ public class MyServerResource {
 		log().info(" ## #Get all students");
 		System.out.println(" **** ## #get all student ##### ***8");
 
-		return hardCodedManagementService.findAllStudents();
+		return myDatabaseService.findAllStudents();
 	}
 	@GetMapping("/instructors/{username}/courses/{id}")
 	public Course getCourse(@PathVariable String username, @PathVariable long id) {
@@ -41,7 +44,7 @@ public class MyServerResource {
 	}
 	@GetMapping("/instructors/{username}/students/{id}")
 	public Student getStudent(@PathVariable String username, @PathVariable long id) {
-		return hardCodedManagementService.findStudentById(id);
+		return myDatabaseService.findStudentById(id);
 	}
 	@DeleteMapping("/instructors/{username}/courses/{id}")
 	public ResponseEntity<Void> deleteCourse(@PathVariable String username, @PathVariable long id) {
@@ -58,7 +61,7 @@ public class MyServerResource {
 	@DeleteMapping("/instructors/{username}/students/{id}")
 	public ResponseEntity<Void> deleteStudent(@PathVariable String username, @PathVariable long id) {
 
-		Student student = hardCodedManagementService.deleteStudentById(id);
+		Student student = myDatabaseService.deleteStudentById(id);
 
 		if (student != null) {
 			return ResponseEntity.noContent().build();
@@ -83,7 +86,7 @@ public class MyServerResource {
 											   @RequestBody Student student) {
 		log().info(" ## #Updastudent");
 
-		Student studentUpdated = hardCodedManagementService.saveStudent(student);
+		Student studentUpdated = myDatabaseService.saveStudent(student);
 
 		return new ResponseEntity<Student>(student, HttpStatus.OK);
 	}
@@ -104,7 +107,7 @@ public class MyServerResource {
 	public ResponseEntity<Void> createStudent(@PathVariable String username, @RequestBody Student student) {
 		log().info("Adding new student"+student.getStudentName());
 
-		Student createdStudent = hardCodedManagementService.saveStudent(student);
+		Student createdStudent = myDatabaseService.saveStudent(student);
 
 		// Location
 		// Get current resource url

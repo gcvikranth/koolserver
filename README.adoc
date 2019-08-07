@@ -10,8 +10,6 @@ mvn install
 java -jar target/skoolserver-1.0-SNAPSHOT.jar
 
 
-
-
 #Build image
 #Package the Java application as a Docker container
 mvn -DskipTests com.google.cloud.tools:jib-maven-plugin:build   -Dimage=gcr.io/$GOOGLE_CLOUD_PROJECT/koolserver:v2
@@ -36,5 +34,11 @@ kubectl delete <<pod>> <<services>>
 #important tutorial#
 https://codelabs.developers.google.com/codelabs/cloud-springboot-kubernetes/#4
 
+kubectl set image deployment/koolserver koolserver=gcr.io/$GOOGLE_CLOUD_PROJECT/koolserver:v2
 
-git clone https://github.com/gcvikranth/skoolui.git
+echo "jdbc:mysql://35.240.194.202:3306/kool_schema" |base64
+
+kubectl --validate=false create -f ./secrets.yml
+kubectl get secrets mysecret -o
+
+https://github.com/shivrajjadhav733/springboot-docker-compose-mysql

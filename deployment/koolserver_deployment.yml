@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-user-pass
+type: Opaque
+data:
+  username: cm9vdAo=
+  password: a29vbGRiCg==
+  mysql-db-url: amRiYzpteXNxbDovLzM1LjI0MC4xOTQuMjAyOjMzMDYva29vbF9zY2hlbWEK
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mysql-configmap
+data:
+  # Configuration values can be set as key-value properties
+  database: mysql
+  database_uri: jdbc:mysql://35.240.194.202:3306/kool_schema
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hellokubernetes
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hellokubernetes
+  template:
+    metadata:
+      labels:
+        app: hellokubernetes
+    spec:
+      containers:
+        - name: hellokubernetes
+          image: gcr.io/useful-aquifer-243905/koolserver:v2
+          ports:
+            - containerPort: 3000
+      env:                    # Environment variables supplied to the Pod
+        - name: MYSQL_USER # Name of the environment variable
+          valueFrom:          # Get the value of environment variable from kubernetes secrets
+          secretKeyRef:
+            name: mysql-user-pass
+            key: username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-user-pass
+              key: password
+        - name: MYSQL_URL
+          valueFrom:
+            secretKeyRef:
+              name: mysql-db-url
+              key: url
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-configmap
+              key: database_uri
+              ports:
+                - containerPort: 890
+                  name: koolserver
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hellokubernetes
+  labels:
+    run: hellokubernetes
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+    - nodePort: 30892
+      port: 8090
+      protocol: TCP
+      targetPort: 8090
+  selector:
+    run: hellokubernetes
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+      - ip: 35.247.152.93
+
+---
